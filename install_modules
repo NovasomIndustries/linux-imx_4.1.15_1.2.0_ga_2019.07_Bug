@@ -1,0 +1,24 @@
+#!/bin/sh
+MODPATH=$1
+KERNPATH=$2
+if [ "$1" == "" ]; then
+	echo "Modules Destination is missing, please provide complete path"
+	exit
+fi
+if [ "$2" == "" ]; then
+	echo "Kernel Destination is missing, please provide complete path"
+	exit
+fi
+. ../../Utils/SourceMe32
+export INSTALL_MOD_PATH=$MODPATH
+export INSTALL_KERN_PATH=$KERNPATH
+export KERNEL_SRC=`pwd`
+rm -rf $MODPATH/lib/modules/*
+make LOCALVERSION= modules_install
+cp arch/arm/boot/zImage $KERNPATH/.
+cd kernel-module-imx-gpu-viv
+make LOCALVERSION= -j32
+make LOCALVERSION= modules_install
+echo "Syncing ... "
+sync
+

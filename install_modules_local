@@ -1,0 +1,19 @@
+#!/bin/sh
+exit
+FS_NAME=$1
+if [ "$1" == "" ]; then
+	echo "Please provide the path where to install the modules"
+	exit
+fi
+. ../../Utils/SourceMe32
+HERE=`pwd`
+export INSTALL_MOD_PATH=${HERE}/../../FileSystem/$FS_NAME/output/target
+export KERNEL_SRC=`pwd`
+rm -rf ${INSTALL_MOD_PATH}/lib/modules/4.1.15-ni
+#make modules_install
+cd kernel-module-imx-gpu-viv
+make modules_install
+cd ..
+make modules_install
+${HERE}/../../FileSystem/$FS_NAME/output/host/sbin/depmod -b ${INSTALL_MOD_PATH} 4.1.15-ni
+

@@ -1,0 +1,9 @@
+#!/bin/sh
+. ../../Utils/SourceMe32
+#make LOCALVERSION=4.1.15 -j32 zImage modules
+make -j32 zImage modules
+cd kernel-module-imx-gpu-viv
+export KERNEL_SRC=..
+make -j32
+cd ..
+
